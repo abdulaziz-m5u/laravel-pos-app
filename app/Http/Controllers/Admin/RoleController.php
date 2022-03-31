@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Role;
+use App\Models\Permission;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Request;
 use App\Http\Requests\Admin\StoreRoleRequest;
 use App\Http\Requests\Admin\UpdateRoleRequest;
-use App\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -17,7 +18,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::paginate(5);
+        $roles = Role::all();
 
         return view('admin.roles.index', compact('roles'));
     }
@@ -45,7 +46,10 @@ class RoleController extends Controller
         $role = Role::create($request->validated());
         $role->permissions()->sync($request->input('permissions'));
 
-        return redirect()->route('admin.roles.index')->with('message', "Successfully Created !");   
+        return redirect()->route('admin.roles.index')->with([
+            'message' => 'successfully created !',
+            'alert-type' => 'success'
+        ]);  
     }
 
     /**
@@ -73,7 +77,10 @@ class RoleController extends Controller
         $role->update($request->validated());
         $role->permissions()->sync($request->input('permissions'));
 
-        return redirect()->route('admin.roles.index')->with('message',  "Successfully updated !");
+        return redirect()->route('admin.roles.index')->with([
+            'message' => 'successfully updated !',
+            'alert-type' => 'info'
+        ]);
     }
 
     /**
@@ -86,6 +93,21 @@ class RoleController extends Controller
     {
         $role->delete();
 
-        return redirect()->route('admin.roles.index')->with('message',  "Successfully deleted !");
+        return redirect()->route('admin.roles.index')->with([
+            'message' => 'successfully deleted !',
+            'alert-type' => 'danger'
+        ]);
+    }
+
+     /**
+     * Delete all selected Permission at once.
+     *
+     * @param Request $request
+     */
+    public function massDestroy(Request $request)
+    {
+        Role::whereIn('id', request('ids'))->delete();
+
+        return response()->noContent();
     }
 }

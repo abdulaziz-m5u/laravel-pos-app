@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Permission;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Admin\StorePermissionRequest;
 use App\Http\Requests\Admin\UpdatePermissionRequest;
@@ -20,7 +21,7 @@ class PermissionController extends Controller
     {      
         abort_if(Gate::denies('permission_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
     
-        $permissions = Permission::paginate(5);
+        $permissions = Permission::get();
 
         return view('admin.permissions.index', compact('permissions'));
     }
@@ -49,7 +50,10 @@ class PermissionController extends Controller
 
         Permission::create($request->validated());
 
-        return redirect()->route('admin.permissions.index')->with('message', "Successfully Created !");
+        return redirect()->route('admin.permissions.index')->with([
+            'message' => 'successfully created !',
+            'alert-type' => 'success'
+        ]);
     }
 
     /**
@@ -78,7 +82,10 @@ class PermissionController extends Controller
 
         $permission->update($request->validated());
 
-        return redirect()->route('admin.permissions.index')->with('message', 'Successfully updated !');
+        return redirect()->route('admin.permissions.index')->with([
+            'message' => 'successfully updated !',
+            'alert-type' => 'info'
+        ]);
     }
 
     /**
@@ -93,6 +100,21 @@ class PermissionController extends Controller
         
         $permission->delete();
 
-        return redirect()->route('admin.permissions.index')->with('message', 'Successfully deleted !');
+        return redirect()->route('admin.permissions.index')->with([
+            'message' => 'successfully created !',
+            'alert-type' => 'danger'
+        ]);
+    }
+
+     /**
+     * Delete all selected Permission at once.
+     *
+     * @param Request $request
+     */
+    public function massDestroy(Request $request)
+    {
+        Permission::whereIn('id', request('ids'))->delete();
+
+        return response()->noContent();
     }
 }

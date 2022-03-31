@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Role;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Request;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 
@@ -17,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(5);
+        $users = User::all();
 
         return view('admin.users.index', compact('users'));
     }
@@ -45,7 +46,10 @@ class UserController extends Controller
         $user = User::create($request->validated() + ['password' => bcrypt($request->password)]);
         $user->roles()->sync($request->input('roles'));
 
-        return redirect()->route('admin.users.index')->with('message', "Successfully Created !");   
+        return redirect()->route('admin.users.index')->with([
+            'message' => 'successfully created !',
+            'alert-type' => 'success'
+        ]);
     }
 
     /**
@@ -73,7 +77,10 @@ class UserController extends Controller
         $user->update($request->validated() + ['password' => bcrypt($request->password)]);
         $user->roles()->sync($request->input('roles'));
 
-        return redirect()->route('admin.users.index')->with('message',  "Successfully updated !");
+        return redirect()->route('admin.users.index')->with([
+            'message' => 'successfully updated !',
+            'alert-type' => 'info'
+        ]);
     }
 
     /**
@@ -86,6 +93,21 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('message',  "Successfully deleted !");
+        return redirect()->route('admin.users.index')->with([
+            'message' => 'successfully deleted !',
+            'alert-type' => 'danger'
+        ]);
+    }
+
+     /**
+     * Delete all selected Permission at once.
+     *
+     * @param Request $request
+     */
+    public function massDestroy(Request $request)
+    {
+        User::whereIn('id', request('ids'))->delete();
+
+        return response()->noContent();
     }
 }
