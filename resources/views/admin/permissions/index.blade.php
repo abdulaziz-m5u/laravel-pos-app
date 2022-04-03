@@ -45,16 +45,18 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $permission->title }}</td>
                                 <td>
-                                    <a href="{{ route('admin.permissions.edit', $permission->id) }}" class="btn btn-info">
-                                        <i class="fa fa-pencil-alt"></i>
-                                    </a>
-                                    <form onclick="return confirm('are you sure ? ')" class="d-inline" action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-danger">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ route('admin.permissions.edit', $permission->id) }}" class="btn btn-info">
+                                            <i class="fa fa-pencil-alt"></i>
+                                        </a>
+                                        <form onclick="return confirm('are you sure ? ')" class="d-inline" action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn btn-danger" style="border-top-left-radius: 0;border-bottom-left-radius: 0;">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             @empty

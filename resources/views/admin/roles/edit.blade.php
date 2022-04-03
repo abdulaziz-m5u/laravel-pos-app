@@ -4,10 +4,6 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">{{ __('edit roles')}}</h1>
-        <a href="{{ route('admin.permissions.index') }}" class="btn btn-primary btn-sm shadow-sm">{{ __('Go Back') }}</a>
-    </div>
 
     @if($errors->any())
         <div class="alert alert-danger">
@@ -21,6 +17,12 @@
 
 <!-- Content Row -->
         <div class="card shadow">
+            <div class="card-header">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">{{ __('edit roles')}}</h1>
+                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-primary btn-sm shadow-sm">{{ __('Go Back') }}</a>
+                </div>
+            </div>
             <div class="card-body">
                 <form action="{{ route('admin.roles.update', $role->id) }}" method="POST">
                     @csrf

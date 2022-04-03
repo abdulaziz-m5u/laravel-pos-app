@@ -46,16 +46,18 @@
                                     @endforeach
                                 </td>
                                 <td>
+                                <div class="btn-group btn-group-sm">
                                     <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-info">
                                         <i class="fa fa-pencil-alt"></i>
                                     </a>
                                     <form onclick="return confirm('are you sure ? ')"  class="d-inline" action="{{ route('admin.roles.destroy', $role->id) }}" method="POST">
                                         @csrf
                                         @method('delete')
-                                        <button class="btn btn-danger">
+                                        <button class="btn btn-danger" style="border-top-left-radius: 0;border-bottom-left-radius: 0;">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </form>
+                                </div>
                                 </td>
                             </tr>
                             @empty
