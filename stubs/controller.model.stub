@@ -20,7 +20,7 @@ class {{ class }} extends Controller
 
     public function create(): View
     {
-        return view('{{ modelVariable }}s.index');
+        return view('{{ modelVariable }}s.create');
     }
 
     public function store({{ model }}{{ storeRequest }} $request): RedirectResponse
